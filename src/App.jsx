@@ -17,7 +17,7 @@ const DEFAULT_SETTINGS = {
 function App() {
   const [activeKeys, setActiveKeys] = useState(new Set())
   const [settings, setSettings] = useState(DEFAULT_SETTINGS)
-  const [octave, setOctave] = useState(2)
+  const [octave, setOctave] = useState(1)  // C1–B4 visible; keyboard covers C1–B2
 
   const notes = useMemo(() => generateNotes(octave), [octave])
   const { keyMap, keyLabels } = useMemo(() => generateKeyMap(octave), [octave])
@@ -94,9 +94,11 @@ function App() {
 
       <footer className="app-footer">
         <div className="app-footer__row">
-          <span>A – J &nbsp;·&nbsp; K L ; ' Z X C &nbsp;=&nbsp; white keys</span>
+          <span>A S D F G H J &nbsp;=&nbsp; white keys (octave 1)</span>
           <span className="app-footer__dot">◆</span>
-          <span>1 2 3 4 5 &nbsp;·&nbsp; 6 7 8 9 0 &nbsp;=&nbsp; black keys</span>
+          <span>Q W E R T Y U &nbsp;=&nbsp; white keys (octave 2)</span>
+          <span className="app-footer__dot">◆</span>
+          <span>1–5 · 6–0 &nbsp;=&nbsp; black keys</span>
           <span className="app-footer__dot">◆</span>
           <span>Space &nbsp;=&nbsp; sustain</span>
         </div>

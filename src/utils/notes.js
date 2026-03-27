@@ -15,19 +15,16 @@ export function generateNotes(baseOctave) {
   return notes
 }
 
-// Keyboard mapping — intuitive layout starting from the leftmost visible key:
+// Keyboard mapping — two reliable rows:
 //
-//  White keys  →  letter keys starting at A (home row + extras)
-//  Black keys  →  number keys 1–0
+//  A row  →  white keys of left octave   (A S D F G H J)
+//  Q row  →  white keys of right octave  (Q W E R T Y U)
+//  Numbers →  black keys in order        (1 2 3 4 5 · 6 7 8 9 0)
 //
-// With 4 octaves visible (base → base+3), we map the LEFT two octaves so
-// 'A' always lands on the leftmost key the user sees.
-//
-// Each octave = 12 notes. White-key indices within an octave: 0,2,4,5,7,9,11
-// Octave 1 of the view = indices  0–11
-// Octave 2 of the view = indices 12–23
+// Maps to the LEFT two octaves of the 4-octave view so 'A' = leftmost key.
+// Each octave = 12 notes. White indices in one octave: 0,2,4,5,7,9,11
 const KEY_POSITIONS = [
-  // ── Octave 1 white keys (A S D F G H J) ──────────────────
+  // ── Octave 1 white keys — A row ───────────────────────────
   ['a',  0],   // C
   ['s',  2],   // D
   ['d',  4],   // E
@@ -35,21 +32,21 @@ const KEY_POSITIONS = [
   ['g',  7],   // G
   ['h',  9],   // A
   ['j', 11],   // B
-  // ── Octave 2 white keys (K L ; ' Z X C) ──────────────────
-  ['k', 12],   // C
-  ['l', 14],   // D
-  [';', 16],   // E
-  ["'", 17],   // F
-  ['z', 19],   // G
-  ['x', 21],   // A
-  ['c', 23],   // B
-  // ── Octave 1 black keys (1 2 3 4 5) ──────────────────────
+  // ── Octave 2 white keys — Q row ───────────────────────────
+  ['q', 12],   // C
+  ['w', 14],   // D
+  ['e', 16],   // E
+  ['r', 17],   // F
+  ['t', 19],   // G
+  ['y', 21],   // A
+  ['u', 23],   // B
+  // ── Octave 1 black keys — numbers 1–5 ────────────────────
   ['1',  1],   // C#
   ['2',  3],   // D#
   ['3',  6],   // F#
   ['4',  8],   // G#
   ['5', 10],   // A#
-  // ── Octave 2 black keys (6 7 8 9 0) ──────────────────────
+  // ── Octave 2 black keys — numbers 6–0 ────────────────────
   ['6', 13],   // C#
   ['7', 15],   // D#
   ['8', 18],   // F#

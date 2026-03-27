@@ -9,11 +9,9 @@
   border-radius: 0 0 6px 6px;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 8px;
-  gap: 3px;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 10px;
   user-select: none;
   box-shadow:
     inset -1px 0 0 rgba(0,0,0,0.08),
@@ -32,7 +30,7 @@
   box-shadow:
     inset -1px 0 0 rgba(0,0,0,0.1),
     inset 1px 0 0 rgba(255,255,255,0.3),
-    0 0 16px rgba(201, 168, 76, 0.6),
+    0 0 18px rgba(201,168,76,0.65),
     1px 2px 4px rgba(0,0,0,0.4);
   transform: translateY(2px) scaleY(0.995);
 }
@@ -48,11 +46,9 @@
   border-radius: 0 0 4px 4px;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 7px;
-  gap: 3px;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
   user-select: none;
   z-index: 2;
   box-shadow:
@@ -70,47 +66,56 @@
   background: linear-gradient(to bottom, #3a2e10 0%, #2a2008 70%, #1e1806 100%);
   box-shadow:
     inset 1px 0 0 rgba(255,255,255,0.04),
-    0 0 14px rgba(201, 168, 76, 0.7),
+    0 0 14px rgba(201,168,76,0.75),
     1px 3px 6px rgba(0,0,0,0.6);
   transform: translateY(2px);
 }
 
-/* ── Labels inside keys ─────────────────────────────────────────────── */
-.piano-key__note {
-  font-size: 8px;
-  font-weight: 500;
+/* ── Labels ──────────────────────────────────────────────────────────── */
+
+/* Keyboard shortcut label (A, S, 1, 2…) — shown prominently */
+.piano-key__label--shortcut {
+  font-size: 10px;
+  font-weight: 600;
   letter-spacing: 0.04em;
-  opacity: 0.45;
-}
-
-.piano-key--white .piano-key__note {
-  color: #555;
-}
-.piano-key--black .piano-key__note {
-  color: #aaa;
-}
-
-.piano-key__label {
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
   border-radius: 3px;
-  padding: 1px 3px;
+  padding: 1px 4px;
+  line-height: 1.4;
 }
 
-.piano-key--white .piano-key__label {
-  color: #888;
-  background: rgba(0,0,0,0.06);
+.piano-key--white .piano-key__label--shortcut {
+  color: #666;
+  background: rgba(0,0,0,0.07);
 }
 
-.piano-key--black .piano-key__label {
-  color: #777;
-  background: rgba(255,255,255,0.06);
+.piano-key--black .piano-key__label--shortcut {
+  color: #999;
+  background: rgba(255,255,255,0.07);
+  font-size: 9px;
 }
 
-/* Mobile — allow horizontal scroll, shrink keys slightly */
-@media (max-width: 700px) {
-  .piano-key__label {
+/* Note name label (C, D#…) for keys with no shortcut — very subtle */
+.piano-key__label--note {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  opacity: 0.22;
+}
+
+.piano-key--white .piano-key__label--note {
+  color: #333;
+}
+
+.piano-key--black .piano-key__label--note {
+  color: #ccc;
+  font-size: 8px;
+  opacity: 0.18;
+}
+
+/* Mobile — hide all labels on very small screens to avoid clutter */
+@media (max-width: 600px) {
+  .piano-key__label--shortcut,
+  .piano-key__label--note {
     display: none;
   }
   .piano-key--white {

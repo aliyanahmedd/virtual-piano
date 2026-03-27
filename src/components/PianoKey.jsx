@@ -1,5 +1,10 @@
 import './PianoKey.css'
 
+// A single piano key.
+// Label priority:
+//   1. If the key has a keyboard shortcut → show just the shortcut (A, S, 1, 2…)
+//   2. If no shortcut → show just the note letter, no octave (C, D#…) very dimly
+// Note + octave is shown in the NoteDisplay bar above when played, not here.
 function PianoKey({ note, keyLabel, isActive, onPress, onRelease }) {
   const className = [
     'piano-key',
@@ -16,8 +21,10 @@ function PianoKey({ note, keyLabel, isActive, onPress, onRelease }) {
       onTouchStart={(e) => { e.preventDefault(); onPress(note.id) }}
       onTouchEnd={(e) => { e.preventDefault(); onRelease(note.id) }}
     >
-      <span className="piano-key__note">{note.name}{note.octave}</span>
-      {keyLabel && <span className="piano-key__label">{keyLabel}</span>}
+      {keyLabel
+        ? <span className="piano-key__label piano-key__label--shortcut">{keyLabel}</span>
+        : <span className="piano-key__label piano-key__label--note">{note.name}</span>
+      }
     </div>
   )
 }
