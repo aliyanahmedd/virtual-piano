@@ -73,43 +73,42 @@
 
 /* ── Labels ──────────────────────────────────────────────────────────── */
 
-/* Keyboard shortcut label (A, S, 1, 2…) — shown prominently */
+/* Keyboard shortcut label — large and clear */
 .piano-key__label--shortcut {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  border-radius: 3px;
-  padding: 1px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 4px;
+  padding: 2px 5px;
   line-height: 1.4;
 }
 
 .piano-key--white .piano-key__label--shortcut {
-  color: #666;
-  background: rgba(0,0,0,0.07);
+  color: #444;
+  background: rgba(0,0,0,0.09);
+  border: 1px solid rgba(0,0,0,0.08);
 }
 
 .piano-key--black .piano-key__label--shortcut {
-  color: #999;
-  background: rgba(255,255,255,0.07);
-  font-size: 9px;
+  color: #bbb;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.06);
+  font-size: 11px;
 }
 
-/* Note name label (C, D#…) for keys with no shortcut — very subtle */
+/* Note name label — very faint, only for unshortcutted keys */
 .piano-key__label--note {
   font-size: 9px;
   font-weight: 400;
   letter-spacing: 0.03em;
-  opacity: 0.22;
+  opacity: 0.18;
 }
 
-.piano-key--white .piano-key__label--note {
-  color: #333;
-}
-
+.piano-key--white .piano-key__label--note { color: #333; }
 .piano-key--black .piano-key__label--note {
   color: #ccc;
   font-size: 8px;
-  opacity: 0.18;
+  opacity: 0.14;
 }
 
 /* Mobile — hide all labels on very small screens to avoid clutter */

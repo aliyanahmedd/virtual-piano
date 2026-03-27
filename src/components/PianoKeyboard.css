@@ -1,22 +1,49 @@
-/* Outer wrapper — simply holds the keyboard body; scrolling handled by piano-stage */
+/* Outer wrapper */
 .keyboard-wrap {
   display: block;
-  line-height: 0; /* removes gap below inline-block keyboard-body */
+  line-height: 0;
 }
 
-/* The lacquer piano body — no top border or radius here because the
-   Controls panel sits directly on top of it, sharing the gold trim */
+/* Piano lacquer body */
 .keyboard-body {
   position: relative;
   background: linear-gradient(to bottom, #111 0%, #1c1c1c 100%);
   border: 1px solid #2a2a2a;
-  border-top: none;   /* controls panel provides the top border */
+  border-top: none;
   border-bottom: none;
-  padding: 24px 20px 0;
+  padding: 36px 20px 0;  /* extra top padding for the zone label */
   box-shadow:
     0 8px 40px rgba(0,0,0,0.9),
     inset 0 1px 0 rgba(255,255,255,0.02);
   display: inline-block;
+}
+
+/* ── Keyboard zone highlight ──────────────────────────────────────── */
+/* A thin gold bar + label above the keys that have keyboard shortcuts */
+.keyboard-zone {
+  position: absolute;
+  top: 0;
+  height: 32px;
+  border-left:  2px solid var(--gold);
+  border-right: 2px solid var(--gold);
+  border-top:   2px solid var(--gold);
+  border-radius: 3px 3px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: rgba(201,168,76,0.04);
+}
+
+.keyboard-zone__label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+  white-space: nowrap;
+  font-family: var(--sans);
+  line-height: 1;
 }
 
 /* Row of white keys */
@@ -27,10 +54,10 @@
   z-index: 1;
 }
 
-/* Black keys layer — absolutely positioned on top */
+/* Black keys layer */
 .keyboard-black-layer {
   position: absolute;
-  top: 24px;
+  top: 36px;   /* matches padding-top of keyboard-body */
   left: 20px;
   right: 20px;
   height: 0;
@@ -42,9 +69,9 @@
   top: 0;
 }
 
-/* Mobile — left-align and scroll */
-@media (max-width: 900px) {
-  .keyboard-wrap {
-    justify-content: flex-start;
+/* Mobile */
+@media (max-width: 600px) {
+  .keyboard-zone__label {
+    display: none;
   }
 }

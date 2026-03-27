@@ -1,38 +1,56 @@
 import './PianoKeyboard.css'
 import PianoKey from './PianoKey'
 
-// White key: 44px wide + 2px gap = 46px per slot
-// Black key: 28px wide, centered between adjacent white keys
-//
-// Centers of white keys within one octave (44px key, 2px gap):
-//   C=22  D=68  E=114  F=160  G=206  A=252  B=298
-// Black key left = midpoint of its two neighbors − (28/2)
+// White key: 44px + 2px gap = 46px per slot
+// Black key: 28px, centered between its two neighbors
 const BLACK_KEY_OFFSETS = {
-  'C#': 31,   // (22+68)/2 − 14
-  'D#': 77,   // (68+114)/2 − 14
-  'F#': 169,  // (160+206)/2 − 14
-  'G#': 215,  // (206+252)/2 − 14
-  'A#': 261,  // (252+298)/2 − 14
+  'C#': 31,
+  'D#': 77,
+  'F#': 169,
+  'G#': 215,
+  'A#': 261,
 }
-
-const WHITE_KEY_SLOT = 46  // 44px key + 2px gap
+const WHITE_KEY_SLOT = 46
 
 function PianoKeyboard({ notes, keyLabels, activeKeys, onPress, onRelease }) {
   const whiteKeys = notes.filter(n => !n.isBlack)
   const blackKeys  = notes.filter(n =>  n.isBlack)
+  const baseOctave = notes[0]?.octave ?? 1
 
-  // Absolute left position of a black key on the full keyboard
   function getBlackKeyLeft(note) {
-    // How many white keys come before this octave?
-    // Each octave has 7 white keys. baseOctave is the first octave in the list.
-    const baseOctave = notes[0].octave
     const octaveOffset = (note.octave - baseOctave) * 7 * WHITE_KEY_SLOT
     return octaveOffset + BLACK_KEY_OFFSETS[note.name]
+  }
+
+  // Find the left/right boundaries of the keyboard-shortcut zone so we can
+  // draw a gold highlight bracket under those keys
+  const shortcutNoteIds = new Set(Object.keys(keyLabels))
+  const shortcutWhiteKeys = whiteKeys.filter(n => shortcutNoteIds.has(n.id))
+  let zoneLeft = null
+  let zoneWidth = null
+  if (shortcutWhiteKeys.length > 0) {
+    // Position of the first shortcut white key in the row
+    const firstIdx = whiteKeys.indexOf(shortcutWhiteKeys[0])
+    const lastIdx  = whiteKeys.indexOf(shortcutWhiteKeys[shortcutWhiteKeys.length - 1])
+    zoneLeft  = firstIdx * WHITE_KEY_SLOT
+    zoneWidth = (lastIdx - firstIdx + 1) * WHITE_KEY_SLOT - 2  // -2 = last gap
   }
 
   return (
     <div className="keyboard-wrap">
       <div className="keyboard-body">
+
+        {/* Gold bracket showing which keys have keyboard shortcuts */}
+        {zoneLeft !== null && (
+          <div
+            className="keyboard-zone"
+            style={{ left: zoneLeft + 20, width: zoneWidth }}
+            title="These keys are mapped to your keyboard (A–J, Q–U, 1–0)"
+          >
+            <span className="keyboard-zone__label">keyboard zone</span>
+          </div>
+        )}
+
         <div className="keyboard-white-layer">
           {whiteKeys.map(note => (
             <PianoKey
@@ -45,6 +63,7 @@ function PianoKeyboard({ notes, keyLabels, activeKeys, onPress, onRelease }) {
             />
           ))}
         </div>
+
         <div className="keyboard-black-layer">
           {blackKeys.map(note => (
             <div
@@ -62,6 +81,7 @@ function PianoKeyboard({ notes, keyLabels, activeKeys, onPress, onRelease }) {
             </div>
           ))}
         </div>
+
       </div>
     </div>
   )

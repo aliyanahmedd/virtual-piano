@@ -15,43 +15,48 @@ export function generateNotes(baseOctave) {
   return notes
 }
 
-// Keyboard mapping — two reliable rows:
+// Keyboard mapping — mapped to the MIDDLE two octaves of the 4-octave view
+// so the labels always appear in the center of the keyboard (most visible).
 //
-//  A row  →  white keys of left octave   (A S D F G H J)
-//  Q row  →  white keys of right octave  (Q W E R T Y U)
-//  Numbers →  black keys in order        (1 2 3 4 5 · 6 7 8 9 0)
+// With 4 octaves visible (indices 0–47):
+//   Octave 1 = 0–11   (click/touch only, leftmost)
+//   Octave 2 = 12–23  (click/touch only)
+//   Octave 3 = 24–35  ← A row keyboard shortcuts
+//   Octave 4 = 36–47  ← Q row keyboard shortcuts
 //
-// Maps to the LEFT two octaves of the 4-octave view so 'A' = leftmost key.
-// Each octave = 12 notes. White indices in one octave: 0,2,4,5,7,9,11
+//  A S D F G H J  →  white keys of octave 3
+//  Q W E R T Y U  →  white keys of octave 4
+//  1 2 3 4 5      →  black keys of octave 3
+//  6 7 8 9 0      →  black keys of octave 4
 const KEY_POSITIONS = [
-  // ── Octave 1 white keys — A row ───────────────────────────
-  ['a',  0],   // C
-  ['s',  2],   // D
-  ['d',  4],   // E
-  ['f',  5],   // F
-  ['g',  7],   // G
-  ['h',  9],   // A
-  ['j', 11],   // B
-  // ── Octave 2 white keys — Q row ───────────────────────────
-  ['q', 12],   // C
-  ['w', 14],   // D
-  ['e', 16],   // E
-  ['r', 17],   // F
-  ['t', 19],   // G
-  ['y', 21],   // A
-  ['u', 23],   // B
-  // ── Octave 1 black keys — numbers 1–5 ────────────────────
-  ['1',  1],   // C#
-  ['2',  3],   // D#
-  ['3',  6],   // F#
-  ['4',  8],   // G#
-  ['5', 10],   // A#
-  // ── Octave 2 black keys — numbers 6–0 ────────────────────
-  ['6', 13],   // C#
-  ['7', 15],   // D#
-  ['8', 18],   // F#
-  ['9', 20],   // G#
-  ['0', 22],   // A#
+  // ── Octave 3 white keys — A row ──────────────────────────
+  ['a', 24],   // C
+  ['s', 26],   // D
+  ['d', 28],   // E
+  ['f', 29],   // F
+  ['g', 31],   // G
+  ['h', 33],   // A
+  ['j', 35],   // B
+  // ── Octave 4 white keys — Q row ──────────────────────────
+  ['q', 36],   // C
+  ['w', 38],   // D
+  ['e', 40],   // E
+  ['r', 41],   // F
+  ['t', 43],   // G
+  ['y', 45],   // A
+  ['u', 47],   // B
+  // ── Octave 3 black keys — 1 2 3 4 5 ─────────────────────
+  ['1', 25],   // C#
+  ['2', 27],   // D#
+  ['3', 30],   // F#
+  ['4', 32],   // G#
+  ['5', 34],   // A#
+  // ── Octave 4 black keys — 6 7 8 9 0 ─────────────────────
+  ['6', 37],   // C#
+  ['7', 39],   // D#
+  ['8', 42],   // F#
+  ['9', 44],   // G#
+  ['0', 46],   // A#
 ]
 
 // Build KEY_MAP and KEY_LABELS dynamically from baseOctave
