@@ -1,30 +1,34 @@
-import { useState, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import PianoKeyboard from './components/PianoKeyboard'
+import Controls from './components/Controls'
 import { useAudio } from './hooks/useAudio'
 import { useKeyboard } from './hooks/useKeyboard'
+import { generateNotes, generateKeyMap } from './utils/notes'
 import './App.css'
 
-// Default settings — will be controlled by the panel in step 6
 const DEFAULT_SETTINGS = {
-  volume:  80,   // 0-100
-  reverb:  25,   // 0-100
+  volume:  80,
+  reverb:  25,
   sustain: false,
 }
 
 function App() {
   const [activeKeys, setActiveKeys] = useState(new Set())
-  const [settings] = useState(DEFAULT_SETTINGS)
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS)
+  const [octave, setOctave] = useState(3)  // base octave — shows octave & octave+1
 
-  // Audio engine — handles sample loading, playback, effects
+  // Recompute notes and key map whenever octave changes
+  // useMemo means this only recalculates when octave actually changes, not every render
+  const notes = useMemo(() => generateNotes(octave), [octave])
+  const { keyMap, keyLabels } = useMemo(() => generateKeyMap(octave), [octave])
+
   const { playNote, stopNote } = useAudio(settings)
 
-  // Press: add to visual activeKeys AND play the sound
   const handlePress = useCallback((noteId) => {
     setActiveKeys(prev => new Set([...prev, noteId]))
     playNote(noteId)
   }, [playNote])
 
-  // Release: remove from visual activeKeys AND tell audio to release
   const handleRelease = useCallback((noteId) => {
     setActiveKeys(prev => {
       const next = new Set(prev)
@@ -34,8 +38,18 @@ function App() {
     stopNote(noteId)
   }, [stopNote])
 
-  // Physical keyboard → piano keys
-  useKeyboard(handlePress, handleRelease)
+  // When octave changes, release all held keys so nothing gets stuck
+  function handleOctaveChange(newOctave) {
+    activeKeys.forEach(noteId => stopNote(noteId))
+    setActiveKeys(new Set())
+    setOctave(newOctave)
+  }
+
+  function handleSettingChange(key, value) {
+    setSettings(prev => ({ ...prev, [key]: value }))
+  }
+
+  useKeyboard(keyMap, handlePress, handleRelease)
 
   return (
     <div className="app">
@@ -49,7 +63,15 @@ function App() {
       </header>
 
       <main className="app-main">
+        <Controls
+          settings={settings}
+          onSettingChange={handleSettingChange}
+          octave={octave}
+          onOctaveChange={handleOctaveChange}
+        />
         <PianoKeyboard
+          notes={notes}
+          keyLabels={keyLabels}
           activeKeys={activeKeys}
           onPress={handlePress}
           onRelease={handleRelease}
@@ -57,7 +79,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>Click keys · Use keyboard (A–J, K–; for two octaves) · Touch on mobile</p>
+        <p>A–J · K–; for two octaves &nbsp;·&nbsp; W E T Y U · O P for black keys</p>
       </footer>
     </div>
   )

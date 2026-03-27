@@ -1,56 +1,47 @@
-import { useState } from 'react'
-import { NOTES } from '../utils/notes'
-import PianoKey from './PianoKey'
 import './PianoKeyboard.css'
+import PianoKey from './PianoKey'
 
-// How far to offset each black key from the left edge of the keyboard (in px)
-// On a real piano, black keys are NOT evenly spaced — they cluster in groups of 2 and 3
-// These offsets match the exact positions of a standard 88-key piano keyboard
-// White key width = 52px, black key width = 34px
-// A black key sits centered between the two white keys it belongs to
-// So C# sits at: C_left + 52 - 34/2 = 35px from C
+// Black key left-offsets within one octave (from left edge of that octave)
+// White key width = 52px + 2px gap = 54px per slot
+// Black key (34px wide) centered between adjacent white keys
 const BLACK_KEY_OFFSETS = {
-  // Per-note offsets within one octave (in px, from the left of that octave)
-  'C#': 35,   // Between C and D
-  'D#': 87,   // Between D and E
-  'F#': 191,  // Between F and G
-  'G#': 243,  // Between G and A
-  'A#': 295,  // Between A and B
+  'C#': 35,
+  'D#': 87,
+  'F#': 191,
+  'G#': 243,
+  'A#': 295,
 }
 
-function PianoKeyboard({ activeKeys, onPress, onRelease }) {
-  // Separate white and black keys so we can layer them correctly
-  const whiteKeys = NOTES.filter(n => !n.isBlack)
-  const blackKeys  = NOTES.filter(n =>  n.isBlack)
+const WHITE_KEY_SLOT = 54  // 52px key + 2px gap
 
-  // Total width of the keyboard = number of white keys × white key width
-  const WHITE_KEY_WIDTH = 52
+function PianoKeyboard({ notes, keyLabels, activeKeys, onPress, onRelease }) {
+  const whiteKeys = notes.filter(n => !n.isBlack)
+  const blackKeys  = notes.filter(n =>  n.isBlack)
 
-  // Calculate the absolute left position of each black key
-  // We need to know: how many white keys came before this octave?
+  // Absolute left position of a black key on the full keyboard
   function getBlackKeyLeft(note) {
-    // Count white keys in octaves before this one (each octave has 7 white keys)
-    const octaveOffset = (note.octave - 3) * 7 * WHITE_KEY_WIDTH
+    // How many white keys come before this octave?
+    // Each octave has 7 white keys. baseOctave is the first octave in the list.
+    const baseOctave = notes[0].octave
+    const octaveOffset = (note.octave - baseOctave) * 7 * WHITE_KEY_SLOT
     return octaveOffset + BLACK_KEY_OFFSETS[note.name]
   }
 
   return (
     <div className="keyboard-wrap">
       <div className="keyboard-body">
-        {/* White keys form the base layer */}
         <div className="keyboard-white-layer">
           {whiteKeys.map(note => (
             <PianoKey
               key={note.id}
               note={note}
+              keyLabel={keyLabels[note.id]}
               isActive={activeKeys.has(note.id)}
               onPress={onPress}
               onRelease={onRelease}
             />
           ))}
         </div>
-
-        {/* Black keys sit on top, absolutely positioned */}
         <div className="keyboard-black-layer">
           {blackKeys.map(note => (
             <div
@@ -60,6 +51,7 @@ function PianoKeyboard({ activeKeys, onPress, onRelease }) {
             >
               <PianoKey
                 note={note}
+                keyLabel={keyLabels[note.id]}
                 isActive={activeKeys.has(note.id)}
                 onPress={onPress}
                 onRelease={onRelease}
