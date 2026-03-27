@@ -1,15 +1,22 @@
 import { useEffect, useRef } from 'react'
 
-// keyMap is now passed in (dynamic — changes with octave shift)
-export function useKeyboard(keyMap, onPress, onRelease) {
-  const heldKeys = useRef(new Set())
-  // Keep a ref to the latest keyMap so the event handlers always see current octave
+// onSustainToggle — called when spacebar is pressed (toggles sustain pedal)
+export function useKeyboard(keyMap, onPress, onRelease, onSustainToggle) {
+  const heldKeys  = useRef(new Set())
   const keyMapRef = useRef(keyMap)
   useEffect(() => { keyMapRef.current = keyMap }, [keyMap])
 
   useEffect(() => {
     function handleKeyDown(e) {
       if (e.metaKey || e.ctrlKey || e.target.tagName === 'INPUT') return
+
+      // Spacebar toggles sustain — preventDefault stops page scroll
+      if (e.key === ' ') {
+        e.preventDefault()
+        onSustainToggle?.()
+        return
+      }
+
       const key = e.key === ';' ? ';' : e.key === "'" ? "'" : e.key.toLowerCase()
       const noteId = keyMapRef.current[key]
       if (!noteId) return
@@ -32,5 +39,5 @@ export function useKeyboard(keyMap, onPress, onRelease) {
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('keyup', handleKeyUp)
     }
-  }, [onPress, onRelease])
+  }, [onPress, onRelease, onSustainToggle])
 }

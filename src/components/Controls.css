@@ -1,69 +1,99 @@
-/* Controls panel — luxury dark instrument console */
+/* Controls panel — part of the instrument body, connects to keyboard below */
 .controls {
   display: flex;
   align-items: center;
-  gap: 36px;
-  padding: 20px 36px;
-  background: linear-gradient(to bottom, #161616, #111);
-  border: 1px solid var(--border);
+  gap: 0;
+  padding: 18px 28px;
+  background: linear-gradient(to bottom, #181818, #131313);
+  border: 1px solid #2a2a2a;
   border-bottom: none;
+  border-top: 2px solid var(--gold);
   border-radius: 10px 10px 0 0;
-  margin: 0 40px;
+  /* No margin — sits flush against keyboard body */
+  width: 100%;
+  max-width: calc(28 * 46px + 40px); /* match keyboard width */
+  box-sizing: border-box;
   box-shadow:
-    0 -2px 20px rgba(0,0,0,0.5),
+    0 -2px 24px rgba(0,0,0,0.6),
     inset 0 1px 0 rgba(255,255,255,0.03);
   flex-wrap: wrap;
+  gap: 0;
 }
 
-/* ── Each control group ──────────────────────────────── */
+/* ── Divider lines between groups ────────────────────── */
+.controls-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--border);
+  margin: 0 24px;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+/* ── Control group ───────────────────────────────────── */
 .control-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-width: 120px;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.control-group--wide {
+  min-width: 160px;
+  flex: 1;
+  max-width: 240px;
 }
 
 .control-label {
   font-size: 10px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-dim);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 6px;
+}
+
+.control-icon {
+  color: var(--gold);
+  opacity: 0.6;
+  font-size: 12px;
+  line-height: 1;
 }
 
 .control-value {
+  margin-left: auto;
   color: var(--gold);
-  font-size: 11px;
-  letter-spacing: 0.05em;
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
 }
 
 /* ── Octave control ──────────────────────────────────── */
 .octave-control {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .octave-value {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-bright);
-  min-width: 40px;
+  min-width: 44px;
   text-align: center;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
 }
 
 .octave-btn {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background: var(--surface-2);
+  background: #1e1e1e;
   color: var(--text);
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -78,31 +108,28 @@
 }
 
 .octave-btn:disabled {
-  opacity: 0.25;
+  opacity: 0.2;
   cursor: not-allowed;
 }
 
-/* ── Slider ──────────────────────────────────────────── */
+/* ── Sliders ─────────────────────────────────────────── */
 .slider-track {
   position: relative;
   height: 4px;
-  background: var(--border);
+  background: #2a2a2a;
   border-radius: 2px;
 }
 
-/* The gold filled portion behind the native input */
 .slider-fill {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   height: 100%;
-  background: var(--gold);
+  background: linear-gradient(to right, #8a6a20, var(--gold));
   border-radius: 2px;
   pointer-events: none;
   transition: width 0.05s;
 }
 
-/* Reset native slider styles, then restyle */
 .slider {
   position: relative;
   z-index: 1;
@@ -121,7 +148,7 @@
   height: 14px;
   border-radius: 50%;
   background: var(--gold-light);
-  border: 2px solid var(--bg);
+  border: 2px solid #0a0a0a;
   box-shadow: 0 0 6px rgba(201,168,76,0.5);
   transition: transform 0.1s, box-shadow 0.1s;
 }
@@ -131,13 +158,14 @@
   height: 14px;
   border-radius: 50%;
   background: var(--gold-light);
-  border: 2px solid var(--bg);
+  border: 2px solid #0a0a0a;
   box-shadow: 0 0 6px rgba(201,168,76,0.5);
 }
 
-.slider:hover::-webkit-slider-thumb {
-  transform: scale(1.2);
-  box-shadow: 0 0 10px rgba(201,168,76,0.7);
+.slider:hover::-webkit-slider-thumb,
+.slider:active::-webkit-slider-thumb {
+  transform: scale(1.25);
+  box-shadow: 0 0 12px rgba(201,168,76,0.7);
 }
 
 /* ── Sustain button ──────────────────────────────────── */
@@ -145,57 +173,84 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 16px;
+  padding: 6px 14px 6px 10px;
   border-radius: 20px;
   border: 1px solid var(--border);
-  background: var(--surface-2);
+  background: #1e1e1e;
   color: var(--text);
   font-size: 12px;
   letter-spacing: 0.1em;
   transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s;
 }
 
-.sustain-btn__icon {
-  font-size: 8px;
-  color: var(--border);
-  transition: color 0.15s;
+.sustain-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.15s, box-shadow 0.15s;
+  flex-shrink: 0;
 }
 
 .sustain-btn--on {
   border-color: var(--gold);
   background: var(--gold-dim);
   color: var(--gold-light);
-  box-shadow: 0 0 12px rgba(201,168,76,0.2);
+  box-shadow: 0 0 14px rgba(201,168,76,0.2);
 }
 
-.sustain-btn--on .sustain-btn__icon {
-  color: var(--gold);
+.sustain-btn--on .sustain-indicator {
+  background: var(--gold);
+  box-shadow: 0 0 6px rgba(201,168,76,0.8);
+}
+
+.sustain-hint {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-left: 2px;
+}
+
+.sustain-btn--on .sustain-hint {
+  border-color: rgba(201,168,76,0.3);
+  color: rgba(201,168,76,0.5);
 }
 
 .sustain-btn:hover {
   border-color: var(--gold);
-  color: var(--text-bright);
 }
 
 /* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 900px) {
   .controls {
-    margin: 0 16px;
-    gap: 24px;
-    padding: 16px 20px;
+    max-width: 100%;
+    padding: 14px 18px;
   }
-  .control-group {
-    min-width: 100px;
+  .controls-divider {
+    margin: 0 16px;
+  }
+  .control-group--wide {
+    min-width: 120px;
   }
 }
 
 @media (max-width: 600px) {
   .controls {
-    gap: 16px;
-    padding: 14px 16px;
-    border-radius: 8px 8px 0 0;
+    padding: 12px 14px;
+    gap: 0;
+  }
+  .controls-divider {
+    display: none;
   }
   .control-group {
     min-width: calc(50% - 8px);
+    flex: 1 1 calc(50% - 8px);
+  }
+  .control-group--wide {
+    min-width: calc(50% - 8px);
+    max-width: none;
   }
 }

@@ -2,15 +2,20 @@
   display: flex;
   flex-direction: column;
   min-height: 100svh;
-  background:
-    /* Subtle vignette — darker at edges, lighter in center */
-    radial-gradient(ellipse at 50% 30%, #1a1614 0%, #0a0a0a 70%);
+  /* Deep dark background with very subtle warm center */
+  background: radial-gradient(ellipse at 50% 35%, #181410 0%, #0a0a0a 65%);
+  transition: background 0.4s;
 }
 
-/* ── Header ──────────────────────────────────────────────────────── */
+/* When any key is active, the whole background warms up slightly */
+.app--playing {
+  background: radial-gradient(ellipse at 50% 35%, #1e1810 0%, #0c0b09 65%);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
 .app-header {
   text-align: center;
-  padding: 48px 24px 32px;
+  padding: 52px 24px 20px;
   flex-shrink: 0;
 }
 
@@ -18,64 +23,114 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 10px;
+  gap: 24px;
+  margin-bottom: 12px;
 }
 
 .app-header__title {
   font-family: var(--serif);
-  font-size: clamp(36px, 5vw, 64px);
+  font-size: clamp(40px, 5.5vw, 72px);
   font-weight: 300;
   color: var(--text-bright);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.2em;
   line-height: 1;
 }
 
 .app-header__ornament {
   color: var(--gold);
-  font-size: clamp(14px, 2vw, 20px);
-  opacity: 0.8;
+  font-size: clamp(16px, 2vw, 22px);
+  opacity: 0.75;
+  /* Slowly spin for a subtle luxury feel */
+  animation: spin-slow 20s linear infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
 .app-header__sub {
   font-size: 11px;
-  letter-spacing: 0.35em;
+  letter-spacing: 0.4em;
   text-transform: uppercase;
   color: var(--gold);
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
-/* Thin gold divider line under the header */
+/* Gold divider */
 .app-header::after {
   content: '';
   display: block;
-  width: 120px;
+  width: 100px;
   height: 1px;
   background: linear-gradient(to right, transparent, var(--gold), transparent);
-  margin: 28px auto 0;
-  opacity: 0.5;
+  margin: 24px auto 0;
+  opacity: 0.4;
 }
 
-/* ── Main area holds the keyboard ────────────────────────────────── */
+/* ── Main — holds controls + keyboard as one unit ────────────────────── */
 .app-main {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  padding-bottom: 0;
+  /* Ambient glow behind the keyboard — intensifies when playing */
+  position: relative;
 }
 
-/* ── Footer ──────────────────────────────────────────────────────── */
+.app-main::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 300px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(201,168,76,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  transition: opacity 0.3s;
+  opacity: 1;
+}
+
+/* Glow gets stronger when a note is playing */
+.app--playing .app-main::before {
+  opacity: 2;
+  background: radial-gradient(ellipse at 50% 100%, rgba(201,168,76,0.15) 0%, transparent 70%);
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
 .app-footer {
   text-align: center;
-  padding: 20px 24px 28px;
+  padding: 18px 24px 28px;
   flex-shrink: 0;
 }
 
-.app-footer p {
+.app-footer__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
   font-size: 11px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--text-dim);
+}
+
+.app-footer__dot {
+  color: var(--gold);
+  font-size: 6px;
+  opacity: 0.5;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .app-header {
+    padding: 36px 16px 16px;
+  }
+  .app-footer__row {
+    gap: 8px;
+    font-size: 10px;
+  }
 }

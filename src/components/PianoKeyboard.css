@@ -1,29 +1,27 @@
-/* Outer wrapper — scroll horizontally when keyboard is wider than screen */
+/* Outer wrapper — centers the keyboard, allows horizontal scroll on small screens */
 .keyboard-wrap {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  padding: 0 40px 0;
+  padding: 0;
   overflow-x: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
 
-/* The piano body — dark lacquer cabinet */
+/* The lacquer piano body — no top border or radius here because the
+   Controls panel sits directly on top of it, sharing the gold trim */
 .keyboard-body {
   position: relative;
-  background: linear-gradient(to bottom, #0f0f0f 0%, #1a1a1a 100%);
+  background: linear-gradient(to bottom, #111 0%, #1c1c1c 100%);
   border: 1px solid #2a2a2a;
+  border-top: none;   /* controls panel provides the top border */
   border-bottom: none;
-  border-radius: 8px 8px 0 0;
   padding: 24px 20px 0;
   box-shadow:
-    0 -4px 30px rgba(0,0,0,0.8),
-    inset 0 1px 0 rgba(255,255,255,0.04),
-    0 0 60px rgba(0,0,0,0.5);
-  border-top: 2px solid var(--gold);
-  /* Shrink-wrap to the keys — no extra width */
+    0 8px 40px rgba(0,0,0,0.9),
+    inset 0 1px 0 rgba(255,255,255,0.02);
   display: inline-block;
 }
 
@@ -50,10 +48,9 @@
   top: 0;
 }
 
-/* Mobile — let keyboard scroll, left-align it */
+/* Mobile — left-align and scroll */
 @media (max-width: 900px) {
   .keyboard-wrap {
-    padding: 0 16px 0;
     justify-content: flex-start;
   }
 }

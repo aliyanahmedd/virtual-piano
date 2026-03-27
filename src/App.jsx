@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react'
 import PianoKeyboard from './components/PianoKeyboard'
 import Controls from './components/Controls'
 import NoteDisplay from './components/NoteDisplay'
+import LoadingOverlay from './components/LoadingOverlay'
 import { useAudio } from './hooks/useAudio'
 import { useKeyboard } from './hooks/useKeyboard'
 import { generateNotes, generateKeyMap } from './utils/notes'
@@ -16,13 +17,12 @@ const DEFAULT_SETTINGS = {
 function App() {
   const [activeKeys, setActiveKeys] = useState(new Set())
   const [settings, setSettings] = useState(DEFAULT_SETTINGS)
-  // baseOctave 2 → shows C2–B5; keyboard keys land on octaves 3–4 (middle of the view)
   const [octave, setOctave] = useState(2)
 
   const notes = useMemo(() => generateNotes(octave), [octave])
   const { keyMap, keyLabels } = useMemo(() => generateKeyMap(octave), [octave])
 
-  const { playNote, stopNote } = useAudio(settings)
+  const { playNote, stopNote, isLoading } = useAudio(settings)
 
   const handlePress = useCallback((noteId) => {
     setActiveKeys(prev => new Set([...prev, noteId]))
@@ -48,10 +48,19 @@ function App() {
     setSettings(prev => ({ ...prev, [key]: value }))
   }
 
-  useKeyboard(keyMap, handlePress, handleRelease)
+  // Spacebar toggles sustain — same as clicking the sustain button
+  const handleSustainToggle = useCallback(() => {
+    setSettings(prev => ({ ...prev, sustain: !prev.sustain }))
+  }, [])
+
+  useKeyboard(keyMap, handlePress, handleRelease, handleSustainToggle)
+
+  const isPlaying = activeKeys.size > 0
 
   return (
-    <div className="app">
+    <div className={`app ${isPlaying ? 'app--playing' : ''}`}>
+      <LoadingOverlay isLoading={isLoading} />
+
       <header className="app-header">
         <div className="app-header__brand">
           <span className="app-header__ornament">✦</span>
@@ -80,7 +89,13 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>A – J &nbsp;·&nbsp; K ; ' for two middle octaves &nbsp;·&nbsp; W E T Y U &nbsp;·&nbsp; O P for black keys</p>
+        <div className="app-footer__row">
+          <span>A – J &nbsp;·&nbsp; K ; ' &nbsp;=&nbsp; two octaves</span>
+          <span className="app-footer__dot">◆</span>
+          <span>W E T Y U &nbsp;·&nbsp; O P &nbsp;=&nbsp; black keys</span>
+          <span className="app-footer__dot">◆</span>
+          <span>Space &nbsp;=&nbsp; sustain</span>
+        </div>
       </footer>
     </div>
   )
