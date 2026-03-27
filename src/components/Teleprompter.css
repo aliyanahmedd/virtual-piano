@@ -1,0 +1,150 @@
+.teleprompter {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ── Header ── */
+.teleprompter__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.teleprompter__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex: 1;
+  min-width: 0;
+}
+
+.teleprompter__title {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--text-bright);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.teleprompter__sep {
+  color: var(--gold);
+  opacity: 0.5;
+}
+
+.teleprompter__artist {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.teleprompter__progress-track {
+  width: 100px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.teleprompter__progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--gold), var(--gold-light));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.teleprompter__close {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.teleprompter__close:hover {
+  color: var(--text-bright);
+}
+
+/* ── Scroll area ── */
+.teleprompter__scroll {
+  padding: 16px 20px 20px;
+  max-height: 195px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Lines ── */
+.teleprompter__line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+
+.teleprompter__line.is-current {
+  opacity: 1;
+}
+
+.teleprompter__line.is-past {
+  opacity: 0.15;
+}
+
+/* ── Key chips ── */
+.teleprompter__key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  transition: background 0.15s, color 0.15s, border-color 0.15s,
+              box-shadow 0.15s, transform 0.15s;
+}
+
+.teleprompter__key.is-current {
+  background: rgba(201, 168, 76, 0.18);
+  border-color: var(--gold);
+  color: var(--gold-light);
+  box-shadow: 0 0 10px rgba(201, 168, 76, 0.4), 0 0 22px rgba(201, 168, 76, 0.12);
+  transform: scale(1.15);
+  font-size: 14px;
+}
+
+.teleprompter__key.is-past {
+  opacity: 0.28;
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Complete banner ── */
+.teleprompter__complete {
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  padding: 6px 0 2px;
+}

@@ -29,7 +29,7 @@ export function useKeyboard(keyMap, onPress, onRelease, onSustainToggle) {
       if (!noteId) return
       if (heldKeys.current.has(key)) return
       heldKeys.current.add(key)
-      onPress(noteId)
+      onPress(noteId, key)
     }
 
     function handleKeyUp(e) {
