@@ -1,13 +1,13 @@
-// Generates a 2-octave note list starting from baseOctave
-// e.g. baseOctave=3 → C3–B4, baseOctave=4 → C4–B5
+// Generates a 4-octave note list starting from baseOctave
+// e.g. baseOctave=2 → C2–B5  (28 white keys — closer to a real piano)
 const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']
 const BLACK_NOTES = new Set(['C#','D#','F#','G#','A#'])
+export const OCTAVE_SPAN = 4   // how many octaves are shown at once
 
 export function generateNotes(baseOctave) {
   const notes = []
-  for (let o = baseOctave; o <= baseOctave + 1; o++) {
+  for (let o = baseOctave; o < baseOctave + OCTAVE_SPAN; o++) {
     for (const name of NOTE_NAMES) {
-      // Internal ID: 'C3', 'Cs3', 'Ds4' etc. (no # symbol — cleaner as object keys)
       const id = name.replace('#', 's') + o
       notes.push({ id, name, octave: o, isBlack: BLACK_NOTES.has(name) })
     }
@@ -15,33 +15,35 @@ export function generateNotes(baseOctave) {
   return notes
 }
 
-// Keyboard key → position index mapping (always the same regardless of octave)
-// Bottom row: white keys of octave 1 then octave 2
-// Top row: black keys
+// Keyboard key → note-array index mapping.
+// We map keys to octaves 3 and 4 within the 4-octave view (indices 24–47).
+// Octaves 1 and 2 (indices 0–23) are click/touch only — no key label shown.
+//
+// Each octave has 12 notes; white-key indices within an octave: 0,2,4,5,7,9,11
+// Octave 3 starts at index 24, octave 4 at index 36.
 const KEY_POSITIONS = [
-  // [key, noteIndexWithinTwoOctaves]
-  // Octave 1 white keys (indices 0,2,4,5,7,9,11)
-  ['a', 0],  // C
-  ['s', 2],  // D
-  ['d', 4],  // E
-  ['f', 5],  // F
-  ['g', 7],  // G
-  ['h', 9],  // A
-  ['j', 11], // B
-  // Octave 2 white keys (indices 12,14,16,17,19,21,23)
-  ['k', 12], // C
-  ['l', 14], // D
-  [';', 16], // E
-  ["'", 17], // F
-  // Octave 1 black keys
-  ['w', 1],  // C#
-  ['e', 3],  // D#
-  ['t', 6],  // F#
-  ['y', 8],  // G#
-  ['u', 10], // A#
-  // Octave 2 black keys
-  ['o', 13], // C#
-  ['p', 15], // D#
+  // Octave 3 white keys
+  ['a', 24],  // C
+  ['s', 26],  // D
+  ['d', 28],  // E
+  ['f', 29],  // F
+  ['g', 31],  // G
+  ['h', 33],  // A
+  ['j', 35],  // B
+  // Octave 4 white keys
+  ['k', 36],  // C
+  ['l', 38],  // D
+  [';', 40],  // E
+  ["'", 41],  // F
+  // Octave 3 black keys
+  ['w', 25],  // C#
+  ['e', 27],  // D#
+  ['t', 30],  // F#
+  ['y', 32],  // G#
+  ['u', 34],  // A#
+  // Octave 4 black keys
+  ['o', 37],  // C#
+  ['p', 39],  // D#
 ]
 
 // Build KEY_MAP and KEY_LABELS dynamically from baseOctave
@@ -61,6 +63,6 @@ export function generateKeyMap(baseOctave) {
   return { keyMap, keyLabels }
 }
 
-// Octave limits — lowest we go is 1, highest is 6 (so 2 octaves always fit)
+// Octave limits — lowest base is 1, highest is 5 (so 4 octaves always fit within 1–8)
 export const MIN_OCTAVE = 1
-export const MAX_OCTAVE = 6
+export const MAX_OCTAVE = 5

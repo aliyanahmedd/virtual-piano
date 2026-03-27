@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
 import PianoKeyboard from './components/PianoKeyboard'
 import Controls from './components/Controls'
+import NoteDisplay from './components/NoteDisplay'
 import { useAudio } from './hooks/useAudio'
 import { useKeyboard } from './hooks/useKeyboard'
 import { generateNotes, generateKeyMap } from './utils/notes'
@@ -15,10 +16,9 @@ const DEFAULT_SETTINGS = {
 function App() {
   const [activeKeys, setActiveKeys] = useState(new Set())
   const [settings, setSettings] = useState(DEFAULT_SETTINGS)
-  const [octave, setOctave] = useState(3)  // base octave — shows octave & octave+1
+  // baseOctave 2 → shows C2–B5; keyboard keys land on octaves 3–4 (middle of the view)
+  const [octave, setOctave] = useState(2)
 
-  // Recompute notes and key map whenever octave changes
-  // useMemo means this only recalculates when octave actually changes, not every render
   const notes = useMemo(() => generateNotes(octave), [octave])
   const { keyMap, keyLabels } = useMemo(() => generateKeyMap(octave), [octave])
 
@@ -38,9 +38,8 @@ function App() {
     stopNote(noteId)
   }, [stopNote])
 
-  // When octave changes, release all held keys so nothing gets stuck
   function handleOctaveChange(newOctave) {
-    activeKeys.forEach(noteId => stopNote(noteId))
+    activeKeys.forEach(id => stopNote(id))
     setActiveKeys(new Set())
     setOctave(newOctave)
   }
@@ -62,6 +61,8 @@ function App() {
         <p className="app-header__sub">Virtual Concert Grand</p>
       </header>
 
+      <NoteDisplay activeKeys={activeKeys} notes={notes} />
+
       <main className="app-main">
         <Controls
           settings={settings}
@@ -79,7 +80,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>A–J · K–; for two octaves &nbsp;·&nbsp; W E T Y U · O P for black keys</p>
+        <p>A – J &nbsp;·&nbsp; K ; ' for two middle octaves &nbsp;·&nbsp; W E T Y U &nbsp;·&nbsp; O P for black keys</p>
       </footer>
     </div>
   )

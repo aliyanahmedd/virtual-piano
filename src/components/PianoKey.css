@@ -1,8 +1,8 @@
 /* ── White key ─────────────────────────────────────────────────────── */
 .piano-key--white {
   position: relative;
-  width: 52px;
-  height: 200px;
+  width: 44px;
+  height: 190px;
   background: linear-gradient(to bottom, #f5f0e8 0%, #ede8df 60%, #ddd8ce 100%);
   border: 1px solid #888;
   border-top: none;
@@ -12,11 +12,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  padding-bottom: 10px;
-  gap: 4px;
-  /* Prevent text selection on rapid clicks */
+  padding-bottom: 8px;
+  gap: 3px;
   user-select: none;
-  /* The 3D depth illusion — a subtle shadow on the right edge */
   box-shadow:
     inset -1px 0 0 rgba(0,0,0,0.08),
     inset 1px 0 0 rgba(255,255,255,0.6),
@@ -29,7 +27,6 @@
   background: linear-gradient(to bottom, #fffaf2 0%, #f5f0e8 60%, #e8e3da 100%);
 }
 
-/* Pressed state — key dips down slightly, glow appears */
 .piano-key--white.piano-key--active {
   background: linear-gradient(to bottom, #fdf0d0 0%, #f5d97a 40%, #e8c840 100%);
   box-shadow:
@@ -43,8 +40,8 @@
 /* ── Black key ─────────────────────────────────────────────────────── */
 .piano-key--black {
   position: absolute;
-  width: 34px;
-  height: 125px;
+  width: 28px;
+  height: 118px;
   background: linear-gradient(to bottom, #1a1a1a 0%, #0d0d0d 70%, #222 100%);
   border: 1px solid #000;
   border-top: none;
@@ -54,7 +51,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  padding-bottom: 8px;
+  padding-bottom: 7px;
   gap: 3px;
   user-select: none;
   z-index: 2;
@@ -80,11 +77,10 @@
 
 /* ── Labels inside keys ─────────────────────────────────────────────── */
 .piano-key__note {
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 500;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   opacity: 0.45;
-  color: inherit;
 }
 
 .piano-key--white .piano-key__note {
@@ -95,11 +91,11 @@
 }
 
 .piano-key__label {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   border-radius: 3px;
-  padding: 1px 4px;
+  padding: 1px 3px;
 }
 
 .piano-key--white .piano-key__label {
@@ -112,17 +108,17 @@
   background: rgba(255,255,255,0.06);
 }
 
-/* Hide labels on small screens — too cramped */
-@media (max-width: 600px) {
+/* Mobile — allow horizontal scroll, shrink keys slightly */
+@media (max-width: 700px) {
   .piano-key__label {
     display: none;
   }
   .piano-key--white {
-    width: 36px;
+    width: 34px;
     height: 150px;
   }
   .piano-key--black {
-    width: 24px;
-    height: 95px;
+    width: 22px;
+    height: 94px;
   }
 }

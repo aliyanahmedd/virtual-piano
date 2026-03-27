@@ -1,4 +1,4 @@
-import { MIN_OCTAVE, MAX_OCTAVE } from '../utils/notes'
+import { MIN_OCTAVE, MAX_OCTAVE, OCTAVE_SPAN } from '../utils/notes'
 import './Controls.css'
 
 function Controls({ settings, onSettingChange, octave, onOctaveChange }) {
@@ -15,7 +15,7 @@ function Controls({ settings, onSettingChange, octave, onOctaveChange }) {
             disabled={octave <= MIN_OCTAVE}
             aria-label="Lower octave"
           >−</button>
-          <span className="octave-value">{octave} – {octave + 1}</span>
+          <span className="octave-value">{octave} – {octave + OCTAVE_SPAN - 1}</span>
           <button
             className="octave-btn"
             onClick={() => onOctaveChange(octave + 1)}

@@ -1,18 +1,21 @@
 import './PianoKeyboard.css'
 import PianoKey from './PianoKey'
 
-// Black key left-offsets within one octave (from left edge of that octave)
-// White key width = 52px + 2px gap = 54px per slot
-// Black key (34px wide) centered between adjacent white keys
+// White key: 44px wide + 2px gap = 46px per slot
+// Black key: 28px wide, centered between adjacent white keys
+//
+// Centers of white keys within one octave (44px key, 2px gap):
+//   C=22  D=68  E=114  F=160  G=206  A=252  B=298
+// Black key left = midpoint of its two neighbors − (28/2)
 const BLACK_KEY_OFFSETS = {
-  'C#': 35,
-  'D#': 87,
-  'F#': 191,
-  'G#': 243,
-  'A#': 295,
+  'C#': 31,   // (22+68)/2 − 14
+  'D#': 77,   // (68+114)/2 − 14
+  'F#': 169,  // (160+206)/2 − 14
+  'G#': 215,  // (206+252)/2 − 14
+  'A#': 261,  // (252+298)/2 − 14
 }
 
-const WHITE_KEY_SLOT = 54  // 52px key + 2px gap
+const WHITE_KEY_SLOT = 46  // 44px key + 2px gap
 
 function PianoKeyboard({ notes, keyLabels, activeKeys, onPress, onRelease }) {
   const whiteKeys = notes.filter(n => !n.isBlack)
