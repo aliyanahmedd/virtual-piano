@@ -75,8 +75,20 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  /* Ambient glow behind the keyboard — intensifies when playing */
   position: relative;
+  overflow: hidden;
+}
+
+/* piano-stage: one coherent block — controls and keyboard always aligned */
+.piano-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;   /* controls stretches to match keyboard width */
+  /* Do NOT set a fixed width here — let the keyboard dictate the width */
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
 .app-main::before {

@@ -73,26 +73,30 @@ function App() {
       <NoteDisplay activeKeys={activeKeys} notes={notes} />
 
       <main className="app-main">
-        <Controls
-          settings={settings}
-          onSettingChange={handleSettingChange}
-          octave={octave}
-          onOctaveChange={handleOctaveChange}
-        />
-        <PianoKeyboard
-          notes={notes}
-          keyLabels={keyLabels}
-          activeKeys={activeKeys}
-          onPress={handlePress}
-          onRelease={handleRelease}
-        />
+        {/* piano-stage keeps controls + keyboard as one fixed-size block so
+            they never drift apart when state updates cause re-renders */}
+        <div className="piano-stage">
+          <Controls
+            settings={settings}
+            onSettingChange={handleSettingChange}
+            octave={octave}
+            onOctaveChange={handleOctaveChange}
+          />
+          <PianoKeyboard
+            notes={notes}
+            keyLabels={keyLabels}
+            activeKeys={activeKeys}
+            onPress={handlePress}
+            onRelease={handleRelease}
+          />
+        </div>
       </main>
 
       <footer className="app-footer">
         <div className="app-footer__row">
-          <span>A – J &nbsp;·&nbsp; K ; ' &nbsp;=&nbsp; two octaves</span>
+          <span>A – J &nbsp;·&nbsp; K L ; ' Z X C &nbsp;=&nbsp; white keys</span>
           <span className="app-footer__dot">◆</span>
-          <span>W E T Y U &nbsp;·&nbsp; O P &nbsp;=&nbsp; black keys</span>
+          <span>1 2 3 4 5 &nbsp;·&nbsp; 6 7 8 9 0 &nbsp;=&nbsp; black keys</span>
           <span className="app-footer__dot">◆</span>
           <span>Space &nbsp;=&nbsp; sustain</span>
         </div>

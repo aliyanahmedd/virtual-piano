@@ -1,13 +1,7 @@
-/* Outer wrapper — centers the keyboard, allows horizontal scroll on small screens */
+/* Outer wrapper — simply holds the keyboard body; scrolling handled by piano-stage */
 .keyboard-wrap {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  padding: 0;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  display: block;
+  line-height: 0; /* removes gap below inline-block keyboard-body */
 }
 
 /* The lacquer piano body — no top border or radius here because the

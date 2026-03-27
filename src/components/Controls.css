@@ -10,8 +10,7 @@
   border-top: 2px solid var(--gold);
   border-radius: 10px 10px 0 0;
   /* No margin — sits flush against keyboard body */
-  width: 100%;
-  max-width: calc(28 * 46px + 40px); /* match keyboard width */
+  width: 100%;      /* stretches to fill piano-stage, which is sized by the keyboard */
   box-sizing: border-box;
   box-shadow:
     0 -2px 24px rgba(0,0,0,0.6),

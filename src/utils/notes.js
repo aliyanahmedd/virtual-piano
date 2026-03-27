@@ -15,35 +15,46 @@ export function generateNotes(baseOctave) {
   return notes
 }
 
-// Keyboard key → note-array index mapping.
-// We map keys to octaves 3 and 4 within the 4-octave view (indices 24–47).
-// Octaves 1 and 2 (indices 0–23) are click/touch only — no key label shown.
+// Keyboard mapping — intuitive layout starting from the leftmost visible key:
 //
-// Each octave has 12 notes; white-key indices within an octave: 0,2,4,5,7,9,11
-// Octave 3 starts at index 24, octave 4 at index 36.
+//  White keys  →  letter keys starting at A (home row + extras)
+//  Black keys  →  number keys 1–0
+//
+// With 4 octaves visible (base → base+3), we map the LEFT two octaves so
+// 'A' always lands on the leftmost key the user sees.
+//
+// Each octave = 12 notes. White-key indices within an octave: 0,2,4,5,7,9,11
+// Octave 1 of the view = indices  0–11
+// Octave 2 of the view = indices 12–23
 const KEY_POSITIONS = [
-  // Octave 3 white keys
-  ['a', 24],  // C
-  ['s', 26],  // D
-  ['d', 28],  // E
-  ['f', 29],  // F
-  ['g', 31],  // G
-  ['h', 33],  // A
-  ['j', 35],  // B
-  // Octave 4 white keys
-  ['k', 36],  // C
-  ['l', 38],  // D
-  [';', 40],  // E
-  ["'", 41],  // F
-  // Octave 3 black keys
-  ['w', 25],  // C#
-  ['e', 27],  // D#
-  ['t', 30],  // F#
-  ['y', 32],  // G#
-  ['u', 34],  // A#
-  // Octave 4 black keys
-  ['o', 37],  // C#
-  ['p', 39],  // D#
+  // ── Octave 1 white keys (A S D F G H J) ──────────────────
+  ['a',  0],   // C
+  ['s',  2],   // D
+  ['d',  4],   // E
+  ['f',  5],   // F
+  ['g',  7],   // G
+  ['h',  9],   // A
+  ['j', 11],   // B
+  // ── Octave 2 white keys (K L ; ' Z X C) ──────────────────
+  ['k', 12],   // C
+  ['l', 14],   // D
+  [';', 16],   // E
+  ["'", 17],   // F
+  ['z', 19],   // G
+  ['x', 21],   // A
+  ['c', 23],   // B
+  // ── Octave 1 black keys (1 2 3 4 5) ──────────────────────
+  ['1',  1],   // C#
+  ['2',  3],   // D#
+  ['3',  6],   // F#
+  ['4',  8],   // G#
+  ['5', 10],   // A#
+  // ── Octave 2 black keys (6 7 8 9 0) ──────────────────────
+  ['6', 13],   // C#
+  ['7', 15],   // D#
+  ['8', 18],   // F#
+  ['9', 20],   // G#
+  ['0', 22],   // A#
 ]
 
 // Build KEY_MAP and KEY_LABELS dynamically from baseOctave
@@ -56,7 +67,8 @@ export function generateKeyMap(baseOctave) {
     if (index < notes.length) {
       const noteId = notes[index].id
       keyMap[key] = noteId
-      keyLabels[noteId] = key === ';' ? ';' : key === "'" ? "'" : key.toUpperCase()
+      // Digits and special chars display as-is; letters go uppercase
+      keyLabels[noteId] = key
     }
   }
 
