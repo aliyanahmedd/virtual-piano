@@ -2,11 +2,9 @@ import { useRef, useEffect, useCallback, useState } from 'react'
 import * as Tone from 'tone'
 import { toToneName } from '../utils/noteConvert'
 
+// Only use samples we know exist on the Tone.js CDN
+// Fewer samples = faster load; Sampler interpolates the rest by pitch-shifting
 const SAMPLE_URLS = {
-  'C2':  'C2.mp3',
-  'Ds2': 'Ds2.mp3',
-  'Fs2': 'Fs2.mp3',
-  'A2':  'A2.mp3',
   'C3':  'C3.mp3',
   'Ds3': 'Ds3.mp3',
   'Fs3': 'Fs3.mp3',
@@ -16,10 +14,6 @@ const SAMPLE_URLS = {
   'Fs4': 'Fs4.mp3',
   'A4':  'A4.mp3',
   'C5':  'C5.mp3',
-  'Ds5': 'Ds5.mp3',
-  'Fs5': 'Fs5.mp3',
-  'A5':  'A5.mp3',
-  'C6':  'C6.mp3',
 }
 
 const TONE_SAMPLE_URLS = Object.fromEntries(
@@ -35,10 +29,8 @@ export function useAudio(settings) {
   const readyRef     = useRef(false)
   const loadingRef   = useRef(false)
 
-  // isLoading: true while samples are being fetched from CDN
-  // isReady: true once samples are fully loaded and playback is safe
-  const [isLoading, setIsLoading] = useState(false)
-  const [isReady,   setIsReady]   = useState(false)
+  // 'idle' | 'loading' | 'ready' | 'error'
+  const [loadState, setLoadState] = useState('idle')
 
   useEffect(() => { settingsRef.current = settings })
 
@@ -63,12 +55,25 @@ export function useAudio(settings) {
     }
   }, [settings.sustain])
 
+  function markReady() {
+    if (readyRef.current) return
+    readyRef.current  = true
+    loadingRef.current = false
+    setLoadState('ready')
+  }
+
   async function init() {
     if (readyRef.current || loadingRef.current) return
     loadingRef.current = true
-    setIsLoading(true)
+    setLoadState('loading')
 
-    await Tone.start()
+    try {
+      await Tone.start()
+    } catch {
+      setLoadState('error')
+      loadingRef.current = false
+      return
+    }
 
     reverbRef.current = new Tone.Reverb({
       decay: 2.5,
@@ -80,15 +85,19 @@ export function useAudio(settings) {
       settingsRef.current.volume === 0 ? -Infinity : Tone.gainToDb(settingsRef.current.volume / 100)
     ).connect(reverbRef.current)
 
+    // Safety timeout — if CDN is slow or a file fails, we proceed after 12s
+    // Tone.Sampler can still play notes by interpolating from whatever loaded
+    const timeout = setTimeout(() => {
+      if (!readyRef.current) markReady()
+    }, 12000)
+
     samplerRef.current = new Tone.Sampler({
       urls: TONE_SAMPLE_URLS,
       baseUrl: 'https://tonejs.github.io/audio/salamander/',
       release: 1,
       onload: () => {
-        readyRef.current  = true
-        loadingRef.current = false
-        setIsLoading(false)
-        setIsReady(true)
+        clearTimeout(timeout)
+        markReady()
       },
     }).connect(volumeRef.current)
   }
@@ -108,5 +117,5 @@ export function useAudio(settings) {
     samplerRef.current.triggerRelease(toToneName(noteId), Tone.now())
   }, [])
 
-  return { playNote, stopNote, isLoading, isReady }
+  return { playNote, stopNote, loadState }
 }

@@ -22,7 +22,7 @@ function App() {
   const notes = useMemo(() => generateNotes(octave), [octave])
   const { keyMap, keyLabels } = useMemo(() => generateKeyMap(octave), [octave])
 
-  const { playNote, stopNote, isLoading } = useAudio(settings)
+  const { playNote, stopNote, loadState } = useAudio(settings)
 
   const handlePress = useCallback((noteId) => {
     setActiveKeys(prev => new Set([...prev, noteId]))
@@ -59,7 +59,7 @@ function App() {
 
   return (
     <div className={`app ${isPlaying ? 'app--playing' : ''}`}>
-      <LoadingOverlay isLoading={isLoading} />
+      <LoadingOverlay loadState={loadState} />
 
       <header className="app-header">
         <div className="app-header__brand">
