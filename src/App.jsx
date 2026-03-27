@@ -1,23 +1,41 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import PianoKeyboard from './components/PianoKeyboard'
+import { useAudio } from './hooks/useAudio'
+import { useKeyboard } from './hooks/useKeyboard'
 import './App.css'
 
+// Default settings — will be controlled by the panel in step 6
+const DEFAULT_SETTINGS = {
+  volume:  80,   // 0-100
+  reverb:  25,   // 0-100
+  sustain: false,
+}
+
 function App() {
-  // activeKeys is a Set of note IDs currently being held down
-  // Using a Set means we can press multiple keys simultaneously (chords)
   const [activeKeys, setActiveKeys] = useState(new Set())
+  const [settings] = useState(DEFAULT_SETTINGS)
 
-  function handlePress(noteId) {
+  // Audio engine — handles sample loading, playback, effects
+  const { playNote, stopNote } = useAudio(settings)
+
+  // Press: add to visual activeKeys AND play the sound
+  const handlePress = useCallback((noteId) => {
     setActiveKeys(prev => new Set([...prev, noteId]))
-  }
+    playNote(noteId)
+  }, [playNote])
 
-  function handleRelease(noteId) {
+  // Release: remove from visual activeKeys AND tell audio to release
+  const handleRelease = useCallback((noteId) => {
     setActiveKeys(prev => {
       const next = new Set(prev)
       next.delete(noteId)
       return next
     })
-  }
+    stopNote(noteId)
+  }, [stopNote])
+
+  // Physical keyboard → piano keys
+  useKeyboard(handlePress, handleRelease)
 
   return (
     <div className="app">
@@ -39,7 +57,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>Click keys · Use keyboard · Touch on mobile</p>
+        <p>Click keys · Use keyboard (A–J, K–; for two octaves) · Touch on mobile</p>
       </footer>
     </div>
   )
