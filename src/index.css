@@ -1,0 +1,63 @@
+:root {
+  /* Color palette — dark luxury piano aesthetic */
+  --bg:           #0a0a0a;
+  --surface:      #111111;
+  --surface-2:    #1a1a1a;
+  --border:       #2a2a2a;
+  --gold:         #c9a84c;
+  --gold-light:   #e8c97a;
+  --gold-dim:     rgba(201, 168, 76, 0.15);
+  --text:         #a0a0a0;
+  --text-bright:  #f0ece4;
+  --text-dim:     #555;
+
+  /* Fonts */
+  --serif:  'Cormorant Garamond', Georgia, serif;
+  --sans:   'Inter', system-ui, sans-serif;
+
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100svh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--sans);
+  color: inherit;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
