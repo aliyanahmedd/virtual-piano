@@ -1,0 +1,59 @@
+/* Outer wrapper — centers the keyboard and adds the "stage" feel */
+.keyboard-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0 40px 40px;
+  overflow-x: auto;
+  /* Custom scrollbar so it doesn't look ugly on desktop */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* The piano body — dark lacquer cabinet that holds the keys */
+.keyboard-body {
+  position: relative;
+  background: linear-gradient(to bottom, #0f0f0f 0%, #1a1a1a 100%);
+  border: 1px solid #2a2a2a;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  padding: 28px 20px 0;
+  box-shadow:
+    0 -4px 30px rgba(0,0,0,0.8),
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 60px rgba(0,0,0,0.5);
+  /* Gold top-edge trim — the subtle luxury detail */
+  border-top: 2px solid var(--gold);
+}
+
+/* Row of white keys laid out side by side */
+.keyboard-white-layer {
+  display: flex;
+  gap: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Black keys layer sits on top of white keys, absolutely positioned */
+.keyboard-black-layer {
+  position: absolute;
+  top: 28px; /* same as keyboard-body padding-top */
+  left: 20px; /* same as keyboard-body padding-inline */
+  right: 20px;
+  height: 0;
+  z-index: 2;
+}
+
+/* Each black key positioner is just an anchor with absolute position */
+.black-key-positioner {
+  position: absolute;
+  top: 0;
+}
+
+/* Responsive — on small screens, allow horizontal scroll */
+@media (max-width: 900px) {
+  .keyboard-wrap {
+    padding: 0 16px 32px;
+    justify-content: flex-start;
+  }
+}
