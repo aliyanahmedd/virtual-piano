@@ -1,52 +1,21 @@
-/* Outer wrapper */
 .keyboard-wrap {
   display: block;
   line-height: 0;
 }
 
-/* Piano lacquer body */
 .keyboard-body {
   position: relative;
   background: linear-gradient(to bottom, #111 0%, #1c1c1c 100%);
   border: 1px solid #2a2a2a;
   border-top: none;
   border-bottom: none;
-  padding: 36px 20px 0;  /* extra top padding for the zone label */
+  padding: 20px 20px 0;
   box-shadow:
     0 8px 40px rgba(0,0,0,0.9),
     inset 0 1px 0 rgba(255,255,255,0.02);
   display: inline-block;
 }
 
-/* ── Keyboard zone highlight ──────────────────────────────────────── */
-/* A thin gold bar + label above the keys that have keyboard shortcuts */
-.keyboard-zone {
-  position: absolute;
-  top: 0;
-  height: 32px;
-  border-left:  2px solid var(--gold);
-  border-right: 2px solid var(--gold);
-  border-top:   2px solid var(--gold);
-  border-radius: 3px 3px 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  background: rgba(201,168,76,0.04);
-}
-
-.keyboard-zone__label {
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.7;
-  white-space: nowrap;
-  font-family: var(--sans);
-  line-height: 1;
-}
-
-/* Row of white keys */
 .keyboard-white-layer {
   display: flex;
   gap: 2px;
@@ -54,10 +23,9 @@
   z-index: 1;
 }
 
-/* Black keys layer */
 .keyboard-black-layer {
   position: absolute;
-  top: 36px;   /* matches padding-top of keyboard-body */
+  top: 20px;
   left: 20px;
   right: 20px;
   height: 0;
@@ -67,11 +35,4 @@
 .black-key-positioner {
   position: absolute;
   top: 0;
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-  .keyboard-zone__label {
-    display: none;
-  }
 }

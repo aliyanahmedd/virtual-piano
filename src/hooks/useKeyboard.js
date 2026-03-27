@@ -1,6 +1,13 @@
 import { useEffect, useRef } from 'react'
 
-// onSustainToggle — called when spacebar is pressed (toggles sustain pedal)
+// Symbols that e.key returns as-is (not affected by toLowerCase)
+const PASSTHROUGH = new Set(['[', ']', ';', "'", ',', '.', '/'])
+
+function normaliseKey(raw) {
+  if (PASSTHROUGH.has(raw)) return raw
+  return raw.toLowerCase()
+}
+
 export function useKeyboard(keyMap, onPress, onRelease, onSustainToggle) {
   const heldKeys  = useRef(new Set())
   const keyMapRef = useRef(keyMap)
@@ -17,7 +24,7 @@ export function useKeyboard(keyMap, onPress, onRelease, onSustainToggle) {
         return
       }
 
-      const key = e.key === ';' ? ';' : e.key === "'" ? "'" : e.key.toLowerCase()
+      const key = normaliseKey(e.key)
       const noteId = keyMapRef.current[key]
       if (!noteId) return
       if (heldKeys.current.has(key)) return
@@ -26,7 +33,7 @@ export function useKeyboard(keyMap, onPress, onRelease, onSustainToggle) {
     }
 
     function handleKeyUp(e) {
-      const key = e.key === ';' ? ';' : e.key === "'" ? "'" : e.key.toLowerCase()
+      const key = normaliseKey(e.key)
       const noteId = keyMapRef.current[key]
       if (!noteId) return
       heldKeys.current.delete(key)

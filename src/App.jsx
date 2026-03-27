@@ -94,11 +94,9 @@ function App() {
 
       <footer className="app-footer">
         <div className="app-footer__row">
-          <span>A S D F G H J &nbsp;=&nbsp; white keys (octave 1)</span>
+          <span>A–J &nbsp;·&nbsp; Q–U &nbsp;·&nbsp; Z–M &nbsp;=&nbsp; white keys</span>
           <span className="app-footer__dot">◆</span>
-          <span>Q W E R T Y U &nbsp;=&nbsp; white keys (octave 2)</span>
-          <span className="app-footer__dot">◆</span>
-          <span>1–5 · 6–0 &nbsp;=&nbsp; black keys</span>
+          <span>1–5 &nbsp;·&nbsp; 6–0 &nbsp;·&nbsp; I O P [ ] &nbsp;=&nbsp; black keys</span>
           <span className="app-footer__dot">◆</span>
           <span>Space &nbsp;=&nbsp; sustain</span>
         </div>
