@@ -1,23 +1,30 @@
+import { useState, useEffect } from 'react'
 import './PianoKeyboard.css'
 import PianoKey from './PianoKey'
 
-const BLACK_KEY_OFFSETS = {
-  'C#': 31,
-  'D#': 77,
-  'F#': 169,
-  'G#': 215,
-  'A#': 261,
+// Black key ratios relative to white key slot size (standard piano geometry)
+const BLACK_KEY_RATIOS = { 'C#': 0.674, 'D#': 1.674, 'F#': 3.674, 'G#': 4.674, 'A#': 5.674 }
+
+function getSlotSize() {
+  return window.innerWidth <= 600 ? 36 : 46
 }
-const WHITE_KEY_SLOT = 46
 
 function PianoKeyboard({ notes, keyLabels, activeKeys, onPress, onRelease }) {
+  const [slotSize, setSlotSize] = useState(getSlotSize)
+
+  useEffect(() => {
+    const onResize = () => setSlotSize(getSlotSize())
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
   const whiteKeys = notes.filter(n => !n.isBlack)
   const blackKeys  = notes.filter(n =>  n.isBlack)
   const baseOctave = notes[0]?.octave ?? 1
 
   function getBlackKeyLeft(note) {
-    const octaveOffset = (note.octave - baseOctave) * 7 * WHITE_KEY_SLOT
-    return octaveOffset + BLACK_KEY_OFFSETS[note.name]
+    const octaveOffset = (note.octave - baseOctave) * 7 * slotSize
+    return octaveOffset + Math.round(BLACK_KEY_RATIOS[note.name] * slotSize)
   }
 
   return (
