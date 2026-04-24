@@ -32,6 +32,14 @@ export function useAudio(settings) {
   // 'idle' | 'loading' | 'ready' | 'error'
   const [loadState, setLoadState] = useState('idle')
 
+  // Mobile browsers block AudioContext until a user gesture.
+  // Unlock it on the very first touch so it's ready when a key is tapped.
+  useEffect(() => {
+    const unlock = () => { Tone.start() }
+    document.addEventListener('touchstart', unlock, { once: true, passive: true })
+    return () => document.removeEventListener('touchstart', unlock)
+  }, [])
+
   useEffect(() => { settingsRef.current = settings })
 
   useEffect(() => {
